@@ -1,7 +1,7 @@
 # Docker installation
 
 ## Prerequisite
-Install docker-for-windows or docker-for-mac
+Install [docker-for-windows](https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe) or [docker-for-mac](https://download.docker.com/mac/stable/Docker.dmg). More information can be found at [Installing Docker Desktop for Windows](https://docs.docker.com/docker-for-windows/install) or [Installing Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/install)
 
 Download and unzip the sources from this repository: https://github.com/bp4mc2/catalog/archive/master.zip
 
