@@ -20,7 +20,7 @@ You should receive some version information, if not: please install and make sur
 2. Unzip to a directory somewhere on your local filesystem (recommended is somewhere within your home directory)
 3. From: `cd local/dotwebstack`...
 4. Start `install.sh` (Linux and Mac) or `install.bat` (Windows)
-5. Start `start-dotwebstack.sh` or `start-dotwebstack.bat` to get the dotwebstack theatre running
+5. Start `start.sh` or `start.bat` to get the dotwebstack theatre running
 6. Go to http://localhost:8080 to see the results
 
 ## Further instructions:
