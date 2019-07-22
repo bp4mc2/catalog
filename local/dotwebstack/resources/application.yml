@@ -1,0 +1,23 @@
+spring:
+  jersey:
+    type: filter
+  resources:
+    static-locations: file:./static/,classpath:/static/
+
+logging.level:
+  org.dotwebstack.framework: INFO
+  org.dotwebstack.ldtlegacy: INFO
+  org.springframework.boot.autoconfigure.logging: INFO
+  org.eclipse.rdf4j: INFO
+
+dotwebstack:
+  config:
+    resourcePath: file:./config
+    host: localhost
+    linkstrategy: local
+    systemGraph: http://dotwebstack.org/configuration/Theatre
+    shacl:
+      uri:
+        result:
+          path: http://www.w3.org/ns/shacl#resultPath
+          message:

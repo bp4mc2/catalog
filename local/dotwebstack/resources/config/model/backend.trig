@@ -1,0 +1,15 @@
+@prefix elmo: <http://dotwebstack.org/def/elmo#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix config: <http://dotwebstack.org/configuration/>.
+
+GRAPH config:Theatre {
+
+  config:DbPediaBackend a elmo:SparqlBackend;
+    elmo:endpoint "http://dbpedia.org/sparql"^^xsd:anyURI
+  .
+
+  config:FusekiBackend a elmo:SparqlBackend;
+    elmo:endpoint "http://localhost:3030/dotwebstack/query"^^xsd:anyURI
+  .
+
+}

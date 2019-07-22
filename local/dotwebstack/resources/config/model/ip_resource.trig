@@ -1,0 +1,26 @@
+@prefix elmo: <http://dotwebstack.org/def/elmo#> .
+@prefix config: <http://dotwebstack.org/configuration/>.
+
+GRAPH config:Theatre {
+
+  config:ResourceData a elmo:InformationProduct;
+    elmo:backend config:FusekiBackend;
+    elmo:requiredParameter elmo:SubjectParameter;
+    elmo:query """
+      prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      CONSTRUCT {
+        ?subject ?p ?o.
+        ?o rdfs:label ?olabel
+      }
+      WHERE {
+        GRAPH ?g {
+          ?subject ?p ?o
+          OPTIONAL {
+            ?o rdfs:label ?olabel
+          }
+        }
+      }
+    """
+  .
+
+}

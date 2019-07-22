@@ -1,0 +1,27 @@
+@prefix elmo: <http://dotwebstack.org/def/elmo#> .
+@prefix config: <http://dotwebstack.org/configuration/>.
+
+GRAPH config:Theatre {
+
+  config:HomeData a elmo:InformationProduct;
+    elmo:backend config:DbPediaBackend;
+    elmo:query """
+      prefix elmo1: <http://bp4mc2.org/elmo/def#>
+      prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+      CONSTRUCT {
+        [] rdfs:label "Linked Data Theatre 2.0 (DotWebStack 0.0.36)"@en;
+          rdfs:label "Linked Data Theater 2.0 (DotWebStack 0.0.36)"@nl;
+          elmo1:html '''
+            <h1>It works!</h1>
+            <p>Welcome at the Linked Data Theatre 2.0 a.k.a. DotWebstack 1.0</p>
+            <p><i>(Running at: %{dotwebstack.config.host})</i></p>
+            <p>Please update /config/model to create your own configuration</p>
+            <img src="/assets/images/rdf.png"/>
+          '''
+        .
+      }
+      WHERE {}
+    """
+  .
+
+}

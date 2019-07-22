@@ -1,7 +1,11 @@
-# Docker installs
+# Docker installation
 
 ## Prerequisite
 Install docker-for-windows or docker-for-mac
+
+Download and unzip the sources from this repository: https://github.com/bp4mc2/catalog/archive/master.zip
+
+**OR** use git and make a clone: `git@github.com:bp4mc2/catalog.git`
 
 ## NginX
 
