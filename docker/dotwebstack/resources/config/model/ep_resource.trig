@@ -1,0 +1,18 @@
+@prefix elmo: <http://dotwebstack.org/def/elmo#> .
+@prefix config: <http://dotwebstack.org/configuration/>.
+@prefix xhtml: <http://www.w3.org/1999/xhtml/vocab#>.
+
+GRAPH config:Theatre {
+
+  config:ResourceEndpoint a elmo:Endpoint;
+    elmo:pathPattern "/resource";
+    elmo:stage config:Stage;
+    elmo:getRepresentation config:ResourceRepresentation;
+  .
+
+  config:ResourceRepresentation a elmo:Representation;
+    elmo:stage config:Stage;
+    elmo:informationProduct config:ResourceData;
+  .
+
+}
