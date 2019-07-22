@@ -25,7 +25,11 @@ The NginX webserver will now be available at http://localhost:8888
 If you want the webserver to be available on another port, change the `8888` setting in the execution command above. You'll have to remove the container first (see below).
 
 ### Showing logs
+Execute:
+
+```
 docker logs webserver -f
+```
 
 Ommit the `-f` if you don't want to follow the log. Use CTRL-C to stop following.
 
@@ -59,7 +63,11 @@ The DotWebStack server will now be available at http://localhost:8080
 If you want the webserver to be available on another port, change the first `8080` setting in the execution command above. You'll have to remove the container first (see below).
 
 ### Showing logs
+
+Execute:
+```
 docker logs dotwebstack -f
+```
 
 Ommit the `-f` if you don't want to follow the log. Use CTRL-C to stop following.
 
