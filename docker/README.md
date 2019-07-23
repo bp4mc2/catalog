@@ -59,12 +59,12 @@ docker build -t bp4mc2-dws .
 Execute:
 
 ```
-docker run --detach --publish=8080:8080 --name=dotwebstack bp4mc2-dws
+docker run --detach --publish=8081:8080 --name=dotwebstack bp4mc2-dws
 ```
 
 The DotWebStack server will now be available at http://localhost:8080
 
-If you want the webserver to be available on another port, change the first `8080` setting in the execution command above. You'll have to remove the container first (see below).
+If you want the webserver to be available on another port, change the `8081` setting in the execution command above. You'll have to remove the container first (see below).
 
 ### Showing logs
 
@@ -81,4 +81,80 @@ Ommit the `-f` if you don't want to follow the log. Use CTRL-C to stop following
 docker stop dotwebstack
 docker start dotwebstack
 docker container rm dotwebstack
+```
+
+## Linked Data theatre
+
+### Building the container
+From the root directory of this repository, execute:
+
+```
+cd docker/ldt
+docker build -t bp4mc2-ldt .
+```
+
+### Running the container
+Execute:
+
+```
+docker run --detach --publish=8080:8080 --name=ldt bp4mc2-ldt
+```
+
+The Linked Data Theatre server will now be available at http://localhost:8080
+
+If you want the webserver to be available on another port, change the first `8080` setting in the execution command above. You'll have to remove the container first (see below).
+
+### Showing logs
+
+Execute:
+```
+docker logs ldt -f
+```
+
+Ommit the `-f` if you don't want to follow the log. Use CTRL-C to stop following.
+
+### Stopping, (re)starting and removing the container
+
+```
+docker stop ldt
+docker start ldt
+docker container rm ldt
+```
+
+## Fuseki
+
+### Building the container
+From the root directory of this repository, execute:
+
+```
+cd docker/fuseki
+docker build -t bp4mc2-fuseki .
+```
+
+### Running the container
+Execute:
+
+```
+docker run --detach --publish=3030:3030 --name=fuseki bp4mc2-fuseki
+```
+
+The Linked Data Theatre server will now be available at http://localhost:3030
+
+If you want the webserver to be available on another port, change the first `3030` setting in the execution command above. You'll have to remove the container first (see below).
+
+### Showing logs
+
+Execute:
+```
+docker logs fuseki -f
+```
+
+Ommit the `-f` if you don't want to follow the log. Use CTRL-C to stop following.
+
+### Stopping, (re)starting and removing the container
+
+```
+docker stop fuseki
+docker start fuseki
+docker container rm fuseki
 ```

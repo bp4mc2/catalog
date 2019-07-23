@@ -1,0 +1,34 @@
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" xmlns="http://jakarta.apache.org/log4j/">
+
+    <!-- This is the standard log appender to the console (System.out) -->
+    <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out"/>
+        <param name="Encoding" value="UTF-8"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} %-5p %c{1} %x - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="debug"/>
+        </filter>
+    </appender>
+
+    <!-- Prevent extra display of eXist paging activity -->
+    <category name="org.exist.storage.btree.Paged">
+        <priority value="warn"/>
+    </category>
+
+    <category name="org.exist.storage.DBBroker">
+        <priority value="warn"/>
+    </category>
+
+    <category name="org.exist.storage.BrokerPool">
+        <priority value="warn"/>
+    </category>
+
+    <!-- You decide here which one of the loggers listed above you want to use. -->
+    <root>
+        <priority value="info"/>
+        <appender-ref ref="ConsoleAppender"/>
+    </root>
+
+</log4j:configuration>
