@@ -1,0 +1,134 @@
+<!--
+
+    NAME     config.xml
+    VERSION  1.23.0
+    DATE     2018-10-20
+
+    Copyright 2012-2018
+
+    This file is part of the Linked Data Theatre.
+
+    The Linked Data Theatre is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    The Linked Data Theatre is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with the Linked Data Theatre.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!--
+    DESCRIPTION
+    Default theatre configuration. This consists of:
+	- The configuration of stages;
+	- The declaration of roles;
+	- A placeholder for some context parameters (which will be filled at run-time)
+
+	You should configure config.xml to your local settings:
+	- env: the environment (prod, test, dev). Only in dev will runtime errors be visible. Default = prod
+    - configuration-endpoint: the SPARQL endpoint which contains the configurations of the Linked Data Theatre
+    - local-endpoint: the SPARQL endpoint that is used as the default endpoint to fetch data
+	- sparql-endpoint: (optional) the SPARQL endpoint that is used for the /sparql page (default is the local-endpoint)
+    - the tempdir, if any: the absolute path to the directory to be used by the linked data theatre for temporary files (default is the tomcat temp dir)
+	- sparql: states if a public sparql endpoint should be available at /sparql. "yes" means: make a public endpoint available.
+	- cors: states if the json-ld service should support CORS (no value defaults to 'yes')
+	- cache: states the caching period for a specific call. (no value defaults to 'none' - no caching). See http://www.w3.org/TR/xmlschema-2#duration. For example: PT1M means 1 minute.
+	- querycache: state the caching period for the configuration of a specific call. Query caching can be used independent of normal caching, but should be enabled if data caching is used.
+	- linkstrategy, if any: the strategy for creating links in de UI. Default will create /resource links, "global" will maintain the original URI
+    - the <site> node contains the configuration for every domainname that is served by the LDT
+      - domain: the domainname for this configuration
+  	  - icon: (optional) the favicon.ico that is visible for this domain
+	  - css: (optional) an alternative css stylesheet for this domain
+	  - site-endpoint: (optional) the SPARQL endpoint that is used as the default endpoint to fetch date (overrides the theatre setting)
+	  - sparql-endpoint: (optional) the SPARQL endpoint that is used for the /sparql page at this site (overrides the theatre setting)
+	  - docroot: (optional): use a docroot, if the LDT is not installed in the tomcat ROOT and is only serving a subdirectory
+			(for example: http://mydomain.org/linkeddatatheatre/...)
+			When using the docroot, all URI's will be made relative to this docroot and not the root itself
+			If the LDT receives a URL without the docroot, it will asume that a proxy has deleted the docroot, and the LDT will reinsert the docroot.
+			THIS IS VERY IMPORTANT WITH REGARD TO id/def/doc URL's and URL's regarding containers!
+	  - staticroot: (optional): use a staticroot if the static content of the LDT is not at the ROOT level.
+			by default, the staticroot is the same as the docroot (it serves the same purpose), but can be used independent if you only want to redirect the static content
+	  - backstage: (optional) the domainname of the backstage, if the backstage domain is different from the stage domain
+	    (for example: a backstage behind a VPN). Make sure that a backstage domain is not a regular site domain!
+	  - the <stage> node contains the configuration for every stage within the specific domain. At least one stage should be present.
+		- name: (optional) the name of the stage
+		- title: (optional) the title of any page on that stage (as displayed in the tab of your browser)
+		- css: (optional) an alternative css stylesheet for this site. This will override the css declaration at site-level
+		- backstage-role: (optional) the role for anybody that can enter the backstage (to update or view the stage configuration)
+	- the <endpoint> node(s) contain extra information uses for sparql-endpoint, currently only for basic-authentication:
+		- username: the username for the endpoint
+		- password: the password for the endpoint
+
+	For every stage, a named graph contains the detailed LDT configuration (the script of the production that is performed on the stage).
+	The URI for the named graph is created from the domain name and the stage name:
+		http://{domain}/{stage name}/stage
+	If a stage doesn't have a name, the URI for the named graph is created from the domain name only:
+		http://{domain}/stage
+	If you need more than one stage for a single site, you should use the name attribute to differentiate between stages.
+
+	A user with the backstage-role can look into the stage configuration using the following URL:
+		http://{domain}/backstage/{stage name}
+-->
+<!-- If you use a RDF4J backend (like GraphDB), please uncomment the line below as a replacement for the <theatre line. -->
+<!-- This assumes that you have a repository named "SYSTEM" with the configuration of the LDT, and the same repository for all your data -->
+<!--
+<theatre env="dev" configuration-endpoint="http://127.0.0.1:8877/repositories/SYSTEM" local-endpoint="http://127.0.0.1:8877/repositories/SYSTEM" sparql="yes">
+-->
+<!-- Set env="dev" to env="prod" in a production environment -->
+<theatre env="dev" configuration-endpoint="http://host.docker.internal:8890/sparql" local-endpoint="http://host.docker.internal:8890/sparql" sparql="yes">
+	<!-- Remove the "backstage" attribute in a production environment (or secure that particular URL) -->
+	<!-- The configuration of the LDT for the site below is used for integration test purposes (during the maven verify phase) -->
+	<site domain="localhost:8888" icon="favicon.ico" backstage="localhost:8888">
+		<stage name="stagename/substagename"/>
+		<stage/>
+	</site>
+	<!-- The default port of Tomcat is 8080, so the site below will give you access to a LDT on a default Tomcat install -->
+	<!-- The configuration of the LDT for the stage below is expected in the named graph <http://localhost:8080/stage> -->
+	<site domain="localhost:8080" icon="favicon.ico" backstage="localhost:8080">
+		<stage/>
+	</site>
+	<!-- Optional: include a third site, with two stages and a backstage for every stage -->
+	<!-- PLEASE NOTE that the order of stages is important: if two stages are a possible match for a URL, the first stage will be used. This means that the "mainstage" should always be the last stage! -->
+	<!-- Example -->
+	<!--
+	<site domain="localhost:8080" backstage="localhost:8080">
+		<stage name="stage2"/>
+		<stage name=""/>
+	</site>
+	-->
+	<!-- End example -->
+	<subdomain/>
+	<query/>
+	<format/>
+	<subject/>
+	<term/>
+	<representation/>
+	<date/>
+	<roles>
+		<!-- Add your own roles for security -->
+		<!-- Example -->
+		<!--
+		<role>admin</role>
+		-->
+		<!-- End example -->
+	</roles>
+	<!-- Example endpoint -->
+	<!--
+	<endpoint url="http://some-secure-endpoint/sparql">
+		<username>john</username>
+		<password>somesecret</password>
+	</endpoint>
+	-->
+	<!-- Example service(authentication) -->
+	<!--
+	<service url="http://some-secure-service">
+		<username>john</username>
+		<password>somesecret</password>
+	</service>
+	-->
+</theatre>

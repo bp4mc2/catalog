@@ -7,6 +7,13 @@ Download and unzip the sources from this repository: https://github.com/bp4mc2/c
 
 **OR** use git and make a clone: `git@github.com:bp4mc2/catalog.git`
 
+## Networking
+The networking configuration uses the simple host.docker.internal DNS entry which is only available in Docker Desktop. This means that the current configuration will not work in a production environment. Changes should be made to:
+
+- /ldt/WEB-INF/resources/apps/ldt/config.xml
+- dotwebstack configuration
+- nginx configuration
+
 ## NginX
 
 ### Building the container
@@ -157,4 +164,42 @@ Ommit the `-f` if you don't want to follow the log. Use CTRL-C to stop following
 docker stop fuseki
 docker start fuseki
 docker container rm fuseki
+```
+
+## Virtuoso
+
+### Building the container
+From the root directory of this repository, execute:
+
+```
+cd docker/virtuoso
+docker build -t bp4mc2-virtuoso .
+```
+
+### Running the container
+Execute:
+
+```
+docker run --detach --publish=8890:8890 --name=virtuoso bp4mc2-virtuoso
+```
+
+The Linked Data Theatre server will now be available at http://localhost:8890
+
+If you want the webserver to be available on another port, change the first `8890` setting in the execution command above. You'll have to remove the container first (see below).
+
+### Showing logs
+
+Execute:
+```
+docker logs virtuoso -f
+```
+
+Ommit the `-f` if you don't want to follow the log. Use CTRL-C to stop following.
+
+### Stopping, (re)starting and removing the container
+
+```
+docker stop virtuoso
+docker start virtuoso
+docker container rm virtuoso
 ```
