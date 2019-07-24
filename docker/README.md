@@ -10,9 +10,20 @@ Download and unzip the sources from this repository: https://github.com/bp4mc2/c
 ## Networking
 The networking configuration uses the simple host.docker.internal DNS entry which is only available in Docker Desktop. This means that the current configuration will not work in a production environment. Changes should be made to:
 
-- /ldt/WEB-INF/resources/apps/ldt/config.xml
-- dotwebstack configuration
+- /ldt/WEB-INF/resources/apps/ldt/config.xml (change `host.docker.internal` to `virtuoso`)
+- dotwebstack/resources/config/model/backend.trig (change `host.docker.internal` to `fuseki`)
 - nginx configuration
+
+## Kubernetes
+
+If you want to use Kubernetes, you only haven to build the images. Do **not** run the containers with the commands below. For Kubernetes, use:
+
+```
+cd docker
+docker stack deploy --compose-file docker-compose.yml bp4mc2-stack
+```
+
+Use `kubectl get po` to find out the status of the pods. Status *ImagePullBackOff* means that you probably haven't build the specific image.
 
 ## NginX
 

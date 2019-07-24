@@ -9,7 +9,7 @@ GRAPH config:Theatre {
   .
 
   config:FusekiBackend a elmo:SparqlBackend;
-    elmo:endpoint "http://localhost:3030/dotwebstack/query"^^xsd:anyURI
+    elmo:endpoint "http://host.docker.internal:3030/dotwebstack/query"^^xsd:anyURI
   .
 
 }
