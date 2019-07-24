@@ -11,8 +11,8 @@ Download and unzip the sources from this repository: https://github.com/bp4mc2/c
 The networking configuration uses the simple host.docker.internal DNS entry which is only available in Docker Desktop. This means that the current configuration will not work in a production environment. Changes should be made to:
 
 - /ldt/WEB-INF/resources/apps/ldt/config.xml (change `host.docker.internal` to `virtuoso`)
-- dotwebstack/resources/config/model/backend.trig (change `host.docker.internal` to `fuseki`)
-- nginx configuration
+- /dotwebstack/resources/config/model/backend.trig (change `host.docker.internal` to `fuseki`)
+- /nginx/default.conf (chang `host.docker.internal:*` to `virtuoso:8890`, `fuseki:3030`, `ldt:8080` and `dotwebstack:8081`)
 
 ## Kubernetes
 
