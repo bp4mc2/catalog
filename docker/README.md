@@ -130,6 +130,8 @@ docker container rm ldt
 
 ## Fuseki
 
+Per default, fuseki restricts the management console to localhost. This restriction is disabled in this configuration. You can change this by editing the shiro.ini file.
+
 ### Building the container
 From the root directory of this repository, execute:
 
@@ -167,6 +169,8 @@ docker container rm fuseki
 ```
 
 ## Virtuoso
+
+Default security is enabled for virtuoso: dba/dba
 
 ### Building the container
 From the root directory of this repository, execute:
