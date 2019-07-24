@@ -14,6 +14,8 @@ RUN set -x \
   && rm /tmp/fuseki.tar.gz \
   && rm -rf $FUSEKI_HOME/fuseki.war
 
+COPY shiro.ini $FUSEKI_BASE/shiro.ini
+
 VOLUME $FUSEKI_BASE
 
 WORKDIR $FUSEKI_HOME
