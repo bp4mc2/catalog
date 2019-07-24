@@ -69,7 +69,7 @@ Execute:
 docker run --detach --publish=8081:8080 --name=dotwebstack bp4mc2-dws
 ```
 
-The DotWebStack server will now be available at http://localhost:8080
+The DotWebStack server will now be available at http://localhost:8081
 
 If you want the webserver to be available on another port, change the `8081` setting in the execution command above. You'll have to remove the container first (see below).
 
