@@ -9,6 +9,12 @@ GRAPH config:Theatre {
     elmo:getRepresentation config:Home;
   .
 
+  config:DwsHomeEndpoint a elmo:Endpoint;
+    elmo:pathPattern "/dws";
+    elmo:stage config:Stage;
+    elmo:getRepresentation config:Home;
+  .
+
   config:Home a elmo:Representation;
     elmo:stage config:Stage;
     elmo:informationProduct config:HomeData;

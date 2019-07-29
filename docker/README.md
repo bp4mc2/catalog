@@ -25,6 +25,16 @@ docker stack deploy --compose-file docker-compose.yml bp4mc2-stack
 
 Use `kubectl get po` to find out the status of the pods. Status *ImagePullBackOff* means that you probably haven't build the specific image.
 
+The stack can be removed with `docker stack rm bp4mc2-stack`
+
+The Kubernetes stack runs at port 80 by default. You can change this by editing the webserver entry in the [docker-compose.yml](docker-compose.yml) file.
+
+The following services can be reached from http:localhost:
+- http://localhost The Linked Data Theatre
+- http://localhost/dws The Dot WebStack server
+- http://localhost/fuseki The fuseki server
+- http://localhost/conductor The Virtuoso conductor
+
 ## NginX
 
 ### Building the container
