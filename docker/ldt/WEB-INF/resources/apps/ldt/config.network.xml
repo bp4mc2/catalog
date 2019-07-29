@@ -80,10 +80,10 @@
 <theatre env="dev" configuration-endpoint="http://127.0.0.1:8877/repositories/SYSTEM" local-endpoint="http://127.0.0.1:8877/repositories/SYSTEM" sparql="yes">
 -->
 <!-- Set env="dev" to env="prod" in a production environment -->
-<theatre env="dev" configuration-endpoint="http://host.docker.internal:8890/sparql" local-endpoint="http://host.docker.internal:8890/sparql" sparql="yes">
+<theatre env="dev" configuration-endpoint="http://virtuoso:8890/sparql" local-endpoint="http://virtuoso:8890/sparql" sparql="yes">
 	<!-- Remove the "backstage" attribute in a production environment (or secure that particular URL) -->
 	<!-- The configuration of the LDT for the site below is used for integration test purposes (during the maven verify phase) -->
-	<site domain="localhost:8888" icon="favicon.ico" backstage="localhost:8888">
+	<site domain="localhost" icon="favicon.ico" backstage="localhost">
 		<stage name="stagename/substagename"/>
 		<stage/>
 	</site>

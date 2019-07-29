@@ -14,4 +14,7 @@ WORKDIR $CATALINA_HOME/webapps
 
 COPY WEB-INF/ ROOT/WEB-INF/
 
+COPY run.sh /run.sh
+RUN chmod +x /run.sh
+
 CMD ["catalina.sh","run"]
