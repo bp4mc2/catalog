@@ -4,11 +4,6 @@ services:
 
   webserver:
     image: bp4mc2-nginx
-    environment:
-      - FUSEKI_HOST=fuseki:3030
-      - VIRTUOSO_HOST=virtuoso:8890
-      - LDT_HOST=host.docker.internal:8080
-      - DOTWEBSTACK_HOST=host.docker.internal:8081
     ports:
       - "80:80"
     command: /bin/bash -c "cp /etc/nginx/conf.d/default.network /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
@@ -33,3 +28,7 @@ services:
     ports:
       - "8080:8080"
     command: /bin/bash -c "/run.sh"
+
+  ldt-config:
+    image: bp4mc2-ldt-config
+    command: /bin/sleep infinity

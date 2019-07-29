@@ -228,3 +228,32 @@ docker stop virtuoso
 docker start virtuoso
 docker container rm virtuoso
 ```
+
+## LDT config
+
+### Building the container
+From the root directory of this repository, execute:
+
+```
+cd docker/ldt-config
+docker build -t bp4mc2-ldt-config .
+```
+
+### Running the container
+This container is a bit special: it is supposed to work as a shell to run commands against
+
+The actual container in the docker compose is doing absolutely nothing (e.g. /bin/sleep).
+
+To execute the actual command, you first need to find out the pod, using `kubectl get po`, and than run the following command:
+
+```
+kubectl exec <POD> ./run.sh
+```
+
+This will execute the run script within the container, just ones.
+
+TODO:
+- The virtuoso database doesn't run correctly. Maybe we need to create an update script (at port 1111)?
+- Maybe we can include the actual config as part of the virtuoso container
+- At least the run.sh command should be run as part of the start-up of this container
+- Maybe we can find some way to "dispose" of this container, or do it some other way...
