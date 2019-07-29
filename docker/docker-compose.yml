@@ -30,8 +30,6 @@ services:
 
   ldt:
     image: bp4mc2-ldt
-    environment:
-      - CATALINA_HOME=/usr/local/tomcat
     ports:
       - "8080:8080"
     command: /bin/bash -c "/run.sh"
