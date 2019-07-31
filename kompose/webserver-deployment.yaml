@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: webserver
+  name: webserver
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: webserver
+    spec:
+      containers:
+      - args:
+        - /bin/bash
+        - -c
+        - cp /etc/nginx/conf.d/default.network /etc/nginx/conf.d/default.conf && exec
+          nginx -g 'daemon off;'
+        image: linkeddataacr.azurecr.io/bp4mc2-nginx:v20190730.1
+        name: webserver
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
+status: {}
