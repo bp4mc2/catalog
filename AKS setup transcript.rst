@@ -1,7 +1,7 @@
 
 1. Set de juiste tenant en default subscription:
 
-    .. codeblock:: console
+    .. code-block:: console
     
         $ az login --tenant "ordinavisionlab.onmicrosoft.com"
         $ az account set --subscription "Visionworks - LinkedDataLab"
@@ -13,7 +13,7 @@
     met lokale Docker en Kubernetes tools. `zorg dat docker desktop actief is
     voordat je inlogt!`
 
-    .. codeblock:: console
+    .. code-block:: console
     
         $ az group create --name LinkedDataDefaultRG --location westeurope
         {
@@ -54,7 +54,7 @@
 
         Vraag de loginserver op, build & tag images in een commando.
 
-    .. codeblock:: console
+    .. code-block:: console
         
         $ az acr list --resource-group LinkedDataDefaultRG --query "[].{acrLoginServer:loginServer}" --output table
         AcrLoginServer
@@ -104,7 +104,7 @@
         - Haal AKS credentials op
         - Check de verbinding
         
-    .. codeblock:: console
+    .. code-block:: console
     
         $ az ad sp create-for-rbac --name ldt-cluster --skip-assignment
         Changing "ldt-cluster" to a valid URI of "http://ldt-cluster", which is the required format used for service principal names
@@ -215,7 +215,7 @@
         - pas de compose file aan naar de Azure container registry
         - deploy pod
         
-    .. codeblock:: console
+    .. code-block:: console
     
         $ brew install kompose
         $ mkdir kompose && cd kompose
@@ -243,7 +243,7 @@
         image: linkeddataacr.azurecr.io/bp4mc2-nginx:v20190730.1
         name: webserver
 
-    .. codeblock:: console
+    .. code-block:: console
         
         $ cd ./kompose
         $ kubectl apply -f .
@@ -286,6 +286,6 @@
 
     Je kunt een bestaand AKS cluster niet pauzerenm alleen verwijderen.
     
-    .. codeblock:: console
+    .. code-block:: console
     
         $ az aks delete --resource-group LinkedDataDefaultRG --name ldt-AKSCluster --subscription "Visionworks - LinkedDataLab" --no-wait
