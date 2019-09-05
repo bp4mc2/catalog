@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managedClusters_ldt_AKSCluster_name": {
+            "value": null
+        },
+        "workspaces_defaultworkspace_5a2a017e_0e75_43c1_949c_0763293f5bd1_weu_externalid": {
+            "value": null
+        }
+    }
+}

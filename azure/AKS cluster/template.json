@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "managedClusters_ldt_AKSCluster_name": {
+            "defaultValue": "ldt-AKSCluster",
+            "type": "String"
+        },
+        "workspaces_defaultworkspace_5a2a017e_0e75_43c1_949c_0763293f5bd1_weu_externalid": {
+            "defaultValue": "/subscriptions/5a2a017e-0e75-43c1-949c-0763293f5bd1/resourceGroups/defaultresourcegroup-weu/providers/microsoft.operationalinsights/workspaces/defaultworkspace-5a2a017e-0e75-43c1-949c-0763293f5bd1-weu",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ContainerService/managedClusters",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('managedClusters_ldt_AKSCluster_name')]",
+            "location": "westeurope",
+            "properties": {
+                "kubernetesVersion": "1.14.6",
+                "dnsPrefix": "ldt-AKSClu-LinkedDataDefaul-5a2a01",
+                "agentPoolProfiles": [
+                    {
+                        "name": "nodepool1",
+                        "count": 1,
+                        "vmSize": "Standard_D2_v3",
+                        "osDiskSizeGB": 100,
+                        "maxPods": 110,
+                        "type": "AvailabilitySet",
+                        "orchestratorVersion": "1.14.6",
+                        "enableNodePublicIP": false,
+                        "osType": "Linux"
+                    }
+                ],
+                "linuxProfile": {
+                    "adminUsername": "azureuser",
+                    "ssh": {
+                        "publicKeys": [
+                            {
+                                "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtMae0K9DUX1EVLaF0VV162fQc8khZBJ2JL4Wl4LOvT+c6nNRybUJ07LBopma2ouDcORITcDnHj1D0YHcBrgERiSFFmcbuOdvSMjNC9yM3/h/EtM8wuEUAtmYR2/STYLhr/IixOebpQrBpEmY0tO/Hbmqdm80R0xM9UJfbWAlkmeL9EWgUn1stsYH+PSVWpH7HVGIrkU6XY52PmFmJAer0E/h7kTOfrb9RsC+XWg6wDfT0R7y6XZH4FP/RPDYlnkMg5xWW1GHNQOCTFWQbn229N4hofaYh4NGaDdpwSj3oRBIDpf/XbT7B0lH5sYPNGvd6Oj0dFfa8egGLSbSZk6OrQ== oneman@mrwhite.local\n"
+                            }
+                        ]
+                    }
+                },
+                "servicePrincipalProfile": {
+                    "clientId": "58f2c52e-04d0-428a-93bc-56c0928ca401"
+                },
+                "addonProfiles": {
+                    "omsagent": {
+                        "enabled": true,
+                        "config": {
+                            "logAnalyticsWorkspaceResourceID": "[parameters('workspaces_defaultworkspace_5a2a017e_0e75_43c1_949c_0763293f5bd1_weu_externalid')]"
+                        }
+                    }
+                },
+                "nodeResourceGroup": "[concat('MC_LinkedDataDefaultRG_', parameters('managedClusters_ldt_AKSCluster_name'), '_westeurope')]",
+                "enableRBAC": true,
+                "networkProfile": {
+                    "networkPlugin": "kubenet",
+                    "loadBalancerSku": "basic",
+                    "podCidr": "10.244.0.0/16",
+                    "serviceCidr": "10.0.0.0/16",
+                    "dnsServiceIP": "10.0.0.10",
+                    "dockerBridgeCidr": "172.17.0.1/16"
+                }
+            }
+        }
+    ]
+}
