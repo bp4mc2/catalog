@@ -1,3 +1,11 @@
+######################
+Azure Test Transcripts
+######################
+
+
+
+AKS Linked Data Theatre test
+############################
 
 1. Set de juiste tenant en default subscription:
 
@@ -129,6 +137,7 @@
           "scope": "/subscriptions/5a2a017e-0e75-43c1-949c-0763293f5bd1/resourceGroups/LinkedDataDefaultRG/providers/Microsoft.ContainerRegistry/registries/LinkedDataACR",
           "type": "Microsoft.Authorization/roleAssignments"
         }
+        $ version=$(az aks get-versions -l westeurope --query 'orchestrators[-1].orchestratorVersion' -o tsv) && echo $version
         $ az aks create \
               --resource-group LinkedDataDefaultRG \
               --name ldt-AKSCluster \
@@ -137,7 +146,9 @@
               --node-count 1 \
               --service-principal 58f2c52e-04d0-428a-93bc-56c0928ca401 \
               --client-secret b592513d-34e3-454d-b7e6-ed00100d9a2f \
-              --generate-ssh-keys
+              --generate-ssh-keys \
+              --enable-addons monitoring \
+              --kubernetes-version $version
         {
           "aadProfile": null,
           "addonProfiles": null,
@@ -208,7 +219,7 @@
         
 5. Deploy containers
         
-    Bestaande docker setup omzettten naar kubernetes en deploy-en:
+    Bestaande docker setup omzetten naar kubernetes en deploy-en:
     
         - installeer kompose
         - converteer de bestaand docker componse file
@@ -282,10 +293,218 @@
         virtuoso-5dc6dc5959-hmzmd      1/1       Running   0          17m
         webserver-66fbd6c5f5-7stwq     1/1       Running   0          17m
         
-6 Delete cluster
+6. Delete cluster
 
-    Je kunt een bestaand AKS cluster niet pauzerenm alleen verwijderen.
+    Running pods & services kun je verwijderen zonder dat je het cluster verwijderd:
     
     .. code-block:: console
     
-        $ az aks delete --resource-group LinkedDataDefaultRG --name ldt-AKSCluster --subscription "Visionworks - LinkedDataLab" --no-wait
+        $ kubectl delete services --all
+        service "dotwebstack" deleted
+        service "fuseki" deleted
+        service "kubernetes" deleted
+        service "ldt" deleted
+        service "virtuoso" deleted
+        service "webserver" deleted
+        $ kubectl delete deployments --all
+        deployment.extensions "dotwebstack" deleted
+        deployment.extensions "fuseki" deleted
+        deployment.extensions "ldt" deleted
+        deployment.extensions "ldt-config" deleted
+        deployment.extensions "virtuoso" deleted
+        deployment.extensions "webserver" deleted
+        
+    Je kunt een bestaand AKS cluster niet pauzeren maar alleen verwijderen.
+    
+    .. code-block:: console
+    
+        $ az aks delete \
+            --resource-group LinkedDataDefaultRG \
+            --name ldt-AKSCluster \
+            --subscription "Visionworks - LinkedDataLab" \
+            --no-wait
+        
+7. Local secret voor kubernetes
+
+    Om een image pull vanaf ACR mogelijk te maken voor kubernetes i.c.m. 
+    manifest files, is een 'secret' nodig. De az-cli kan dat aanmaken voor
+    docker, maar niet voor kubernetes. Dat moet met kubectl zelf:
+    
+    .. code-block:: console
+    
+        kubectl create secret docker-registry ldt-secret \
+          --docker-server linkeddataacr.azurecr.io \
+          --docker-email peter.teunissen@ordina.nl \
+          --docker-username 58f2c52e-04d0-428a-93bc-56c0928ca401 \
+          --docker-password b592513d-34e3-454d-b7e6-ed00100d9a2f
+          
+    Voeg vervolgens aan elk deployment manifest file het volgende toe aan de
+    sectie spec.template.spec:
+    
+    .. code-block:: yaml
+    
+        imagePullSecrets:
+        - name: ldt-secret
+            
+    De login gegevens worden dan doorgegeven aan het cluster, zodat deze de
+    images van de ACR kan halen, ook bij gebruik van een lokale kubernetes.
+
+
+
+DevOps demo test
+################
+
+Lab: https://www.azuredevopslabs.com/labs/vstsextend/kubernetes/
+Azure DevOps omgeving: https://dev.azure.com/peterteunissen/Demo
+
+1. Afwijkend van lab, hergebruik van eerdere AKS setup:
+
+    .. code-block:: console
+    
+        $ az login --tenant "ordinavisionlab.onmicrosoft.com"
+        $ az account set --subscription "Visionworks - LinkedDataLab"
+        $ version=$(az aks get-versions -l westeurope --query 'orchestrators[-1].orchestratorVersion' -o tsv) && echo $version
+        $ az aks create \
+              --resource-group LinkedDataDefaultRG \
+              --name ldt-AKSCluster \
+              --location westeurope \
+              --node-vm-size Standard_D2_v3 \
+              --node-count 1 \
+              --service-principal 58f2c52e-04d0-428a-93bc-56c0928ca401 \
+              --client-secret b592513d-34e3-454d-b7e6-ed00100d9a2f \
+              --generate-ssh-keys \
+              --enable-addons monitoring \
+              --kubernetes-version $version
+        az aks get-credentials --resource-group LinkedDataDefaultRG --name ldt-AKSCluster
+        
+2. Maak SQL DB aan:
+
+    Maak een standaard S0 server aan met een DB
+
+    .. code-block:: console
+    
+        $ az sql server create \
+            --location westeurope \
+            --resource-group LinkedDataDefaultRG \
+            --name handsonlabsrv \
+            --admin-user sqladmin \
+            --admin-password H4nd50nl4b
+        {
+          "administratorLogin": "sqladmin",
+          "administratorLoginPassword": null,
+          "fullyQualifiedDomainName": "handsonlabsrv.database.windows.net",
+          "id": "/subscriptions/5a2a017e-0e75-43c1-949c-0763293f5bd1/resourceGroups/LinkedDataDefaultRG/providers/Microsoft.Sql/servers/handsonlabsrv",
+          "identity": null,
+          "kind": "v12.0",
+          "location": "westeurope",
+          "name": "handsonlabsrv",
+          "resourceGroup": "LinkedDataDefaultRG",
+          "state": "Ready",
+          "tags": null,
+          "type": "Microsoft.Sql/servers",
+          "version": "12.0"
+        }
+        $  az sql db create \
+            --resource-group LinkedDataDefaultRG \
+            --server handsonlabsrv \
+            --name handsonlabsdb \
+            --service-objective S0
+        {
+          "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+          "collation": "SQL_Latin1_General_CP1_CI_AS",
+          "createMode": null,
+          "creationDate": "2019-08-06T11:11:04.957000+00:00",
+          "currentServiceObjectiveName": "S0",
+          "currentSku": {
+            "capacity": 10,
+            "family": null,
+            "name": "Standard",
+            "size": null,
+            "tier": "Standard"
+          },
+          "databaseId": "053b530a-e186-4b6b-b63c-b7e610210c81",
+          "defaultSecondaryLocation": "northeurope",
+          "earliestRestoreDate": "2019-08-06T11:41:04.957000+00:00",
+          "edition": "Standard",
+          "elasticPoolId": null,
+          "elasticPoolName": null,
+          "failoverGroupId": null,
+          "id": "/subscriptions/5a2a017e-0e75-43c1-949c-0763293f5bd1/resourceGroups/LinkedDataDefaultRG/providers/Microsoft.Sql/servers/handsonlabsrv/databases/handsonlabsdb",
+          "kind": "v12.0,user",
+          "licenseType": null,
+          "location": "westeurope",
+          "longTermRetentionBackupResourceId": null,
+          "managedBy": null,
+          "maxLogSizeBytes": null,
+          "maxSizeBytes": 268435456000,
+          "name": "handsonlabsdb",
+          "readScale": "Disabled",
+          "recoverableDatabaseId": null,
+          "recoveryServicesRecoveryPointId": null,
+          "requestedServiceObjectiveName": "S0",
+          "resourceGroup": "LinkedDataDefaultRG",
+          "restorableDroppedDatabaseId": null,
+          "restorePointInTime": null,
+          "sampleName": null,
+          "sku": {
+            "capacity": 10,
+            "family": null,
+            "name": "Standard",
+            "size": null,
+            "tier": "Standard"
+          },
+          "sourceDatabaseDeletionDate": null,
+          "sourceDatabaseId": null,
+          "status": "Online",
+          "tags": null,
+          "type": "Microsoft.Sql/servers/databases",
+          "zoneRedundant": false
+        }
+
+3. Lijst met belangrijke gegevens
+
+    - DB Servername: handsonlabsrv.database.windows.net
+    - SQL user: sqladmin
+    - SQL password: H4nd50nl4b
+    - ACR Login Servername: linkeddataacr.azurecr.io
+    - Database name: handsonlabsdb
+
+4. Excercise 1: Configure Build and Release pipeline
+
+    Zie Lab beschrijving op website.
+    
+    Notities:
+    
+        - je hebt meer info nodig dat ze je eerst laten opzoeken, zie hierboven
+          voor de volledige set
+        - er zit een fout in de demo, pas in stap 7 (pipelines > releases > edit > beide AKS deployments) een setting aan:
+        
+            - klap de 'advanced' sectie open
+            - activeer de checkbox 'check latest version'
+        
+        - er zit een fout in de mhc-front image. De container belandt in een
+          crash loop.
+        - om het dashboard te bekijken:
+        
+            .. code-block:: console
+            
+                $ az aks browse --resource-group LinkedDataDefaultRG --name ldt-AKSCluster
+                
+            Dit geeft echter issues omdat we een RBAC cluster hebben. De enige
+            oplossing daarvoor zet het dashboard voor iedereen open...
+
+5. Opruimen:
+
+    .. code-block:: console
+    
+        $ az aks delete \
+            --resource-group LinkedDataDefaultRG \
+            --name ldt-AKSCluster \
+            --subscription "Visionworks - LinkedDataLab" \
+            --no-wait
+        $ az sql server delete \
+            --name handsonlabsrv \
+            --resource-group LinkedDataDefaultRG
+            
+            
+az sql server delete --name handsonlabsrv --resource-group LinkedDataDefaultRG

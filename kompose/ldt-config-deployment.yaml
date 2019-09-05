@@ -24,5 +24,7 @@ spec:
         image: linkeddataacr.azurecr.io/bp4mc2-ldt-config:v20190730.1
         name: ldt-config
         resources: {}
+      imagePullSecrets:
+      - name: ldt-secret
       restartPolicy: Always
 status: {}
